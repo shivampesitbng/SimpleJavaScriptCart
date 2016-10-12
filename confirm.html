@@ -18,7 +18,7 @@
 				
 				<!-- CART -->
 				<div  class="col-sm-4"  >
-					<div style="background-color:lavenderblush;">YOUR CART<button class = "button" style="float: right;background-color:#8a6d3b;" id = "clear-cart">Clear Cart</button></div>
+					<div style="background-color:lavenderblush;">YOUR CART<!--button class = "button" style="float: right;background-color:#8a6d3b;" id = "clear-cart">Clear Cart</button--></div>
 					<div align="center" style="background-color:lavenderblush;min-height:100px;max-height:100px;overflow: scroll;overflow-x: hidden;min-width:100%;">
 						<ul id="show-cart" ></ul>
 					</div>
@@ -403,7 +403,7 @@
 						$("#disc").html(disc);
 						$("#discounttotal").html(shoppingCart.totalCart()-disc);
 					} 
-					else if(x === "coupon1" &&  shoppingCart.totalCart()<300){
+					else if( (x === "coupon1" || x==="coupon2") &&  shoppingCart.totalCart()<300){
 						
 						document.getElementById("coupon").innerHTML = " Min Ord to Avail thi coup is Rs 300";
 						
