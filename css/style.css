@@ -1,0 +1,59 @@
+
+		
+		::-webkit-scrollbar {
+				width: 7px;
+		}
+		::-webkit-scrollbar-track {
+			background-color: #eaeaea;
+			border-left: 1px solid #ccc;
+		}
+		::-webkit-scrollbar-thumb {
+			background-color: #ccc;
+		}
+		::-webkit-scrollbar-thumb:hover {
+		  background-color: #aaa;
+		}
+		.button {
+			background-color: #4CAF50; /* Green */
+			border: none;
+			color: white;
+			padding: 1px 15px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 12px;
+		}
+		.subtract-item,.plus-item,.delete-item {
+			background-color:#b5842a; /* Green */
+			border: none;
+			color: white;
+			padding: 1px 7px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 12px;
+		}
+		th{
+			border: 1px solid black;
+			border-collapse: collapse;
+			padding: 2;
+			text-align: center;
+		}
+		tr{
+			text-align: center;
+			
+		}
+		td {
+			border: 0px solid black;
+			border-collapse: collapse;
+			padding: 2;
+			text-align: center;
+			
+		}
+		#total-cart{
+			font-weight:bold;
+		}
+		#minord{
+			
+			color:#000;
+		}

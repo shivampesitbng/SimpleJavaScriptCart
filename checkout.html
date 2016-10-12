@@ -1,0 +1,525 @@
+<html>
+	<head>
+		<title>Website | Checkout</title>
+		<script src="js/jquery-3.1.1.min.js"> </script>
+		<script src="js/myCart.js"> </script>
+		<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<link href="css/style.css" rel='stylesheet' type='text/css' />
+		<!--script src="http://code.jquery.com/jquery-1.11.3.min.js"> </script-->
+	</head>
+	<body>
+		
+		<div class="container-fluid">
+			<h1  style="text-align: center;"> Checkout </h1>
+			<div class="row">
+				<div class="col-sm-4" ></div>
+				
+				
+				
+				
+				<!-- CART -->
+				<div  class="col-sm-4"  >
+					<div style="background-color:lavenderblush;">REVIEW CART<!--button class = "button" style="float: right;background-color:#8a6d3b;" id = "clear-cart">Clear Cart</button--></div>
+					<div align="center" style="background-color:lavenderblush;min-height:100px;max-height:100px;overflow: scroll;overflow-x: hidden;min-width:100%;">
+						<ul id="show-cart" ></ul>
+					</div>
+					<div  style="background-color:lavenderblush;">Total: &#x20b9; <span id="total-cart"></span><button onclick="confirm()" class = "button" style="float: right;">Confirm</button></div>
+					<div style="background-color:orange;" id="minord"></div>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<!--div class="row">
+			<div class="col-sm-4" ></div>
+			<div class="col-sm-4" align = "right">
+				<input id="string">
+				<button type="button" class = "button" onclick="coupon()">Add Coupon</button>
+				<p id="coupon"></p>
+			</div>
+			<div class="col-sm-4" ></div>
+			</div-->
+			
+			
+		</div>
+		
+		
+				
+		<script>		
+				
+				
+				$(".add-to-cart").click(function(event){
+					event.preventDefault(); //Wont jump to Top of page On click
+					var name = $(this).attr("data-name");
+					var price = Number($(this).attr("data-price"));
+					
+					shoppingCart.addItemToCart(name,price,1);
+					displayCart();
+				});
+				
+				$("#clear-cart").click(function(event){
+					shoppingCart.clearCart();
+					displayCart();
+				});
+				
+				
+				
+				
+				
+				function displayCart() {
+					//console.log("***Display Cart*** ");
+					
+					var cartArray = shoppingCart.listCart();
+					//console.log("***Display Cart*** :"+cartArray.length);
+					
+					var output = "";
+					for(var i in cartArray) {
+						output += "<tr >"+"<td>"
+							+cartArray[i].name+"</td>"+"<td>"
+							+" <button class='subtract-item' data-name='"
+							+cartArray[i].name+"'>-</button>"+"</td>"+"<td>"
+							+" "+cartArray[i].count+"</td>"+"<td>"
+							+" <button class ='plus-item' data-name='"
+							+cartArray[i].name+"'>+</button>"+"</td>"+"<td>"
+							+" x "+cartArray[i].price+"</td>"+"<td>"
+							+" = "+" &#x20b9; "+cartArray[i].total+"</td>"+"<td>"
+							//+" <button class='subtract-item' data-name='"
+							//+cartArray[i].name+"'>-</button>"
+							//+" <button class ='plus-item' data-name='"
+							//+cartArray[i].name+"'>+</button>"
+							+" <button class ='delete-item' data-name='"
+							+cartArray[i].name+"'>x</button>"+"</td>"
+							+"</tr>";
+					}
+					$("#show-cart").html(output);
+					$("#total-cart").html(shoppingCart.totalCart());
+					
+					
+					
+				}
+				
+				$("#show-cart").on("click",".delete-item", function(event){
+						var name = $(this).attr("data-name");
+						shoppingCart.removeItemFromCartAll(name);
+						displayCart();
+				});
+				
+				$("#show-cart").on("click",".subtract-item", function(event){
+						var name = $(this).attr("data-name");
+						shoppingCart.removeItemFromCart(name);
+						displayCart();
+				});
+				
+				$("#show-cart").on("click",".plus-item", function(event){
+						var name = $(this).attr("data-name");
+						shoppingCart.addItemToCart(name,0,1);
+						displayCart();
+				});
+				
+				
+				
+			
+				
+				
+				//*************************************************
+				//Shopping Cart Func
+				
+				//OBJ IN ARR ( Possible ), But Cart should be Empty Initially
+				//name price cart
+				//var cart = [{name:"brush",price:1.99,count:3},{name:"brush2",price:1.99,count:8}];
+				
+				//var cart = []; //Empty Cart
+				
+				
+				
+				/*
+					// {name:"Brush",price:1.99,count:1}
+					//Creating Obj
+					var brush = new Item("Brush",1.99,1);
+					
+					//console.log(a);
+					
+					//ADD TO CART
+					cart.push(new Item("Apple",2.13,1));
+					cart.push(brush);
+					
+					//PRINT CART
+					for(var i=0;i<cart.length;i++){
+						console.log(cart[i]);
+					}
+				*/
+				
+				//**********************************************************************
+				//	Shopping Cart Functions
+				
+				//Converting Shopping Cart in Single Obj
+				var shoppingCart = {};
+				shoppingCart.cart = []; //cart now belongs to shoppingCart
+				
+				//Func To Genertae Obj
+				shoppingCart.Item = function(name,price,count) {
+					this.name = name
+					this.price = price
+					this.count = count
+				};
+				
+				//addItemToCart
+				shoppingCart.addItemToCart = function(name,price,count){
+					//Count of Item of same Name
+					for(var i in this.cart) {
+						if(this.cart[i].name === name) {
+							this.cart[i].count += count ;
+							this.saveCart(); //Save before return
+							return;
+						}
+					}
+					//Add New Item
+					var item = new this.Item(name,price,count);
+					this.cart.push(item);
+					this.saveCart();
+				};
+				
+				/*
+					//Test Cart
+					addItemToCart("Apple",1.22,1);
+					addItemToCart("Orange",3.55,4);
+					addItemToCart("Apple",1.22,3);
+					addItemToCart("Kuchu",100.22,5);
+					addItemToCart("Shoe",10.72,3);
+					
+					console.log(cart);
+					console.log(cart[0]);
+					console.log(cart[1]);
+					//console.log(cart[0].name);
+				*/
+				
+				//  a = 3 	-> Assignment op
+				// 	"3" == 3  ->	true
+				//	"3" === 3 	->   false
+				
+				//removeItemFromCart, Remove one item
+				shoppingCart.removeItemFromCart = function(name){
+					for(var i in this.cart) {
+						if(this.cart[i].name === name) {
+							this.cart[i].count-- ;
+							//Remove Item Name from Cart, The Item, No. of Item
+							if(this.cart[i].count === 0) {
+								this.cart.splice(i, 1);
+							}
+							break;
+						}
+					}
+					this.saveCart();
+				};
+				
+				/*
+					//Test Cart
+					console.log(cart[0].count);
+					
+					removeItemFromCart("Apple");
+					removeItemFromCart("Apple");
+					removeItemFromCart("Apple");
+					removeItemFromCart("Apple");
+					//removeItemFromCart("Apple");
+					//removeItemFromCart("Apple");
+					
+					console.log(cart[0].count);
+					console.log(cart);
+				*/
+				
+				//	removeItemFromCartAll(name) //Removes all item name
+				shoppingCart.removeItemFromCartAll = function(name){
+					for(var i in this.cart) {
+						if(this.cart[i].name === name){
+							this.cart.splice(i,1);
+							break;
+						}
+					}
+					this.saveCart();
+				};
+				
+				/*
+					//Test Cart
+					addItemToCart("Apple",1.22,1);
+					addItemToCart("Orange",3.55,4);
+					addItemToCart("Apple",1.22,3);
+					addItemToCart("Kuchu",100.22,10);
+					
+					console.log(cart.length);
+					console.log(cart);
+					
+					removeItemFromCartAll("Apple");
+					
+					console.log(cart.length);
+					console.log(cart);
+				*/	
+				
+				//	clearCart()
+				shoppingCart.clearCart = function() {
+					this.cart = [];
+					this.saveCart();
+				};
+				
+				/*
+					clearCart();
+					console.log(cart);
+				*/
+				
+				//	countCart()	-> return total Count
+				shoppingCart.countCart = function(){
+					var totalCount = 0;
+					for(var i in cart) {
+						totalCount += this.cart[i].count;
+					}
+					return totalCount;
+				};
+				
+				//Print Total Item in Cart
+				//console.log(countCart());
+				
+				//	totalCart()	->	return total cost
+				var totalCost;
+				shoppingCart.totalCart = function() {
+					totalCost = 0;
+					for(var i in this.cart) {
+						totalCost += this.cart[i].price * this.cart[i].count;
+					}
+					
+						return totalCost.toFixed(2);
+					
+					
+				};
+				
+				//Print Total of Cart
+				//console.log(totalCart());
+				
+				
+				
+				//	listCart()	->	array of Item ( CopyCart)
+				shoppingCart.listCart = function(){
+					var cartCopy = [];
+					for(var i in this.cart) {
+						var item = this.cart[i];
+						var itemCopy = {};
+						for(var p in item) {
+							itemCopy[p] = item[p] ;
+						}
+						itemCopy.total = (item.price * item.count).toFixed(2) ;
+						cartCopy.push(itemCopy);
+					}
+					return cartCopy;
+					//return cart;
+					//return cart.slice();
+				};
+				
+				/*
+					//PrintCopyCart Test
+					var array = listCart();
+					array[0].name = "Mistake";
+					console.log( array);
+				*/
+				
+				/*
+					var a = ["A","B","C"];
+					var b = a; //Doesnot create copy ,Instead give Refernece to Original Copy(Same Address)
+					b.push("D");
+					// a & b have same content
+					console.log(a);
+					console.log(b);
+				*/	
+				/*
+					//COPY ARR -> slice()
+					var a = ["A","B","C"];
+					//Easy Way to Copy Array is Slice
+					var b = a.slice();
+					b.push("D");
+					// a & b have different content
+					console.log(a);
+					console.log(b);
+				*/
+				/*
+					var a = {age:22,name:"kuchu"}
+					var b = a;
+					b.name = "chugu";
+					//Prints chugu in both
+					console.log(a);
+					console.log(b);
+				*/
+				
+				//	saveCart() --> to local Storage
+				shoppingCart.saveCart = function(){
+					localStorage.setItem("shoppingCart",JSON.stringify(this.cart)); //Convert Cart into JSON String
+				};
+				
+				/*
+					localStorage.setItem("age", "50");
+					localStorage.setItem("username", "Kuchua");
+				*/
+				
+				//	loadCart()  --> From local Storage
+				shoppingCart.loadCart = function(){
+					this.cart = JSON.parse(localStorage.getItem("shoppingCart"));
+				};
+				
+				shoppingCart.loadCart();
+				displayCart(); // Display After Load
+				
+				var array = shoppingCart.listCart();
+				//console.log("---------------------");
+				console.log(array);
+				
+				function confirm() {
+					
+					if(shoppingCart.totalCart() < 200){
+						//print min order is 200
+						document.getElementById("minord").innerHTML = "min order is 200";
+					}
+					else{
+						location.href = "confirm.html";
+					}
+					
+				
+				}
+				/*
+				function coupon() {
+					var x;
+					x = document.getElementById("string").value;
+
+					if ( x === "coupon1" && shoppingCart.totalCart()>=300) {
+						
+						//new cart total
+						
+						document.getElementById("coupon").innerHTML = "valid";
+						
+					} 
+					else if(x === "coupon1" &&  shoppingCart.totalCart()<300){
+						
+						document.getElementById("coupon").innerHTML = " Min Ord to Avail thi coup is Rs 300";
+					}
+					else {
+						document.getElementById("coupon").innerHTML = " Invalid Coupon";
+					}
+					
+				}
+				*/
+
+				  
+		</script>
+		
+		<!--script>
+			// SCOPE :Determines  Where Varialble/Value is Visible/Can be Used
+			
+			var global = "Hi" ;
+			
+			function myfunction() {
+				console.log(global);
+			}
+		</script>
+		<script>
+			console.log(global); //Declare variable in one script, it exists for other script, can be used in another script
+			
+			var global = 10;
+			console.log(global); //Print  After Changing Global
+			
+			myfunction(); //Print 10
+		</script>
+		
+		<script>
+			
+			/*
+				//FUNCTION, Generally Used to Generate Object
+				function myfunction(message, count) {
+					for(var i = 0; i < count; i++){
+						console.log(message); //	10FuckYou, Doesnot Repeat, Print Count
+					}
+				}
+				
+				//call or invoke func
+				myfunction("FuckYou",10)
+				
+				function square(num) {
+					return num *num 
+					console.log("bdhuvdsuvuds"); //after return in func, no line will execute
+				}
+				
+				square(10); // will not print;
+				console.log( square(3)); //Print
+			*/
+			/*
+				//array, Empty
+				var cart = [];
+				
+				//Obj, of Items
+				var item = {name:"Apple", cost:1.99, count:2};
+				
+				//Push Item in Empty Cart
+				cart.push(item);
+				
+				//Print Cart, All ele in Obj get pushed at array[0]
+				console.log(cart);
+				
+				//Prints the Oject, Properly & Seperately
+				console.log(cart[0]);
+				console.log(cart[0].name);
+				console.log(cart[0].cost);
+				
+				console.log(cart[1]); //undefined, 1 is not therein cart
+				console.log(cart[0].price); //undefined, price not present, cost is
+				
+				//to print more than one Obj in Cart
+				for(var i = 0; i < cart.length; i++) {
+					console.log(cart[i]);
+				}
+			*/
+			/*
+				//CREATING OBJECT ( Arranged Collection, accessed by a KEY )
+				var obj = {name:"Apple", cost:1.99, count:2}; // [ ]
+				
+				console.log(obj.name);
+				console.log(obj.cost);
+				
+				//print key & key value in Object
+				for(var key in obj) {
+					console.log(key+": "+obj[key]); 
+				}
+				
+				var array = ["A","B","C"];
+				
+				//print key & key value for Array 
+				for(var key in array) {
+						console.log(key+": "+array[key]); 
+				}
+			*/
+			
+			/*
+				//initialise array & put Items in Array 
+				var array = ["A","B","C"];
+				
+				array.push("D");
+				
+				//It will print The Array Elements : A	B  C  D
+				for(var i = 0; i < array.length; i++){
+					console.log(array[i]);
+				}
+				
+			*/
+			
+			/*
+				//It will print The Entire Array : ["A", "B", "C"]
+				console.log(array);
+				
+				//Printing first item only : A
+				console.log(array[0]);
+				
+				//Getting lenght of array
+				console.log(array.length);
+				
+				//Inserting one more item in the Array
+				array.push("D");
+				
+				//Again  getting the lenght of the Array after Insertion of the New Item
+				console.log(array.length);
+			*/
+		</script>
+		
+		
+	</body>
+</html>
