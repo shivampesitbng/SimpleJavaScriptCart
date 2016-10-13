@@ -17,12 +17,12 @@
 				
 				
 				<!-- CART -->
-				<div  class="col-sm-4"  >
+				<div  class="col-sm-4"  style="box-shadow: 3px 3px 10px #888888;">
 					<div style="background-color:lavenderblush;">YOUR CART<!--button class = "button" style="float: right;background-color:#8a6d3b;" id = "clear-cart">Clear Cart</button--></div>
 					<div align="center" style="background-color:lavenderblush;min-height:100px;max-height:100px;overflow: scroll;overflow-x: hidden;min-width:100%;">
 						<ul id="show-cart" ></ul>
 					</div>
-					<div  style="background-color:lavenderblush;">Total: &#x20b9; <span id="total-cart"></span><button onclick="confirmfinal()" class = "button" style="float: right;">Checkout</button></div>
+					<div  style="background-color:lavenderblush;">Total: &#x20b9; <span id="total-cart"></span><!--button onclick="confirmfinal()" class = "button" style="float: right;">Checkout</button--></div>
 					<div style="background-color:lavenderblush;">Discount: &#x20b9; <span id="disc"></span></div>
 					<div style="background-color:lavenderblush;">Total (After Discount): &#x20b9; <span id="discounttotal"></span></div>
 					<div style="background-color:orange;" id="minord"></div>
@@ -33,15 +33,35 @@
 			<div class="row">
 			<div class="col-sm-4" ></div>
 			<div class="col-sm-4" align = "right">
-				<input id="string">
+				<input id="string" style="">
 				<button type="button" class = "button" onclick="coupon()">Add Coupon</button>
 				<p id="coupon"></p>
+				<p><b>Hints</b> : ( To Use Coupon )</p>
 				<p>To Avail Coupon Order should be of &#x20b9; 300 or Above</p>
 				<p > Enter "Coupon1" For &#x20b9; 50 Discount</p>
 				<p > Enter "Coupon2" For &#x20b9; 100 Discount</p>
 			</div>
 			<div class="col-sm-4" ></div>
 			</div>
+			
+				<!--ADD DISPLAY-->
+			<div class="container-fluid">
+			<div class="col-sm-4" ></div>
+			<div class="col-sm-4" >
+			<div  align="center"><p> ----- Section to Display Entered/Selected Address ----- </p></div>
+			</div>
+			<div class="col-sm-4" ></div>
+			</div>
+			
+			
+			<div class="row">
+			<div class="col-sm-4" ></div>
+			<div class="col-sm-4" >
+			<div  align="center" ><button onclick="confirmfinal()" class = "button" >Confirm Order</button></div>
+			</div>
+			<div class="col-sm-4" ></div>
+			</div>
+			
 			
 			<script>		
 				

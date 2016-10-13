@@ -1,7 +1,8 @@
 
 		
 		::-webkit-scrollbar {
-				width: 7px;
+				width: 5px;
+				box-shadow: 3px 3px 10px #888888;
 		}
 		::-webkit-scrollbar-track {
 			background-color: #eaeaea;
@@ -13,6 +14,7 @@
 		::-webkit-scrollbar-thumb:hover {
 		  background-color: #aaa;
 		}
+		
 		.button {
 			background-color: #4CAF50; /* Green */
 			border: none;
@@ -22,6 +24,7 @@
 			text-decoration: none;
 			display: inline-block;
 			font-size: 12px;
+			box-shadow: 3px 3px 10px #888888;
 		}
 		.subtract-item,.plus-item,.delete-item {
 			background-color:#b5842a; /* Green */
@@ -32,9 +35,11 @@
 			text-decoration: none;
 			display: inline-block;
 			font-size: 12px;
+			border-radius:100%;
+			box-shadow: 3px 3px 10px #888888;
 		}
 		th{
-			border: 1px solid black;
+			border: 0px solid black;
 			border-collapse: collapse;
 			padding: 2;
 			text-align: center;
@@ -57,3 +62,14 @@
 			
 			color:#000;
 		}
+		#discounttotal{
+			font-weight:bold;
+		}
+		#category{
+			min-height:25px;
+			min-width:100%;
+			float:left;
+			border: 1px solid black;
+			text-align:center;
+		}
+		
