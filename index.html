@@ -213,6 +213,7 @@
 					}
 					//Add New Item
 					var item = new this.Item(name,price,count);
+					this.cart = this.cart || [];
 					this.cart.push(item);
 					this.saveCart();
 				};
